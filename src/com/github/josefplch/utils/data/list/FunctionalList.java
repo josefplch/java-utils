@@ -37,7 +37,7 @@ import java.util.function.UnaryOperator;
  * 
  * @author  Josef Plch
  * @since   2018-05-02
- * @version 2022-03-21
+ * @version 2022-09-06
  */
 public class FunctionalList <A> implements Foldable <A>, Functor <A>, List <A>, Serializable {
     protected final List <A> delegate;
@@ -252,18 +252,18 @@ public class FunctionalList <A> implements Foldable <A>, Functor <A>, List <A>, 
     // Monadic function, Haskell's "bind", aka "concatMap".
     // (Java is not expressive enough to describe a monad.)
     public <B> FunctionalList <B> flatMap (Function <A, ? extends List <? extends B>> f) {
-        return this.flatMap ((i, x) -> f.apply (x), FunctionalList :: new);
-    }
-    
-    public <B> FunctionalList <B> flatMap (BiFunction <Integer, A, ? extends List <? extends B>> f) {
-        return this.flatMap (f, FunctionalList :: new);
+        return this.flatMapI ((i, x) -> f.apply (x), FunctionalList :: new);
     }
     
     public <B, LB extends FunctionalList <B>> LB flatMap (Function <A, ? extends List <? extends B>> f, Supplier <LB> constructor) {
-        return this.flatMap ((i, x) -> f.apply (x), constructor);
+        return this.flatMapI ((i, x) -> f.apply (x), constructor);
     }
     
-    public <B, LB extends FunctionalList <B>> LB flatMap (BiFunction <Integer, A, ? extends List <? extends B>> f, Supplier <LB> constructor) {
+    public <B> FunctionalList <B> flatMapI (BiFunction <Integer, A, ? extends List <? extends B>> f) {
+        return this.flatMapI (f, FunctionalList :: new);
+    }
+    
+    public <B, LB extends FunctionalList <B>> LB flatMapI (BiFunction <Integer, A, ? extends List <? extends B>> f, Supplier <LB> constructor) {
         return this.genericMap ((i, x, list) -> list.addAll (f.apply (i, x)), constructor);
     }
     
@@ -543,18 +543,18 @@ public class FunctionalList <A> implements Foldable <A>, Functor <A>, List <A>, 
     
     @Override
     public <B> FunctionalList <B> map (Function <A, B> f) {
-        return this.map ((i, x) -> f.apply (x), FunctionalList :: new);
-    }
-    
-    public <B> FunctionalList <B> map (BiFunction <Integer, A, B> f) {
-        return this.map (f, FunctionalList :: new);
+        return this.mapI ((i, x) -> f.apply (x), FunctionalList :: new);
     }
     
     public <B, LB extends FunctionalList <B>> LB map (Function <A, B> f, Supplier <LB> constructor) {
-        return this.map ((i, x) -> f.apply (x), constructor);
+        return this.mapI ((i, x) -> f.apply (x), constructor);
     }
     
-    public <B, LB extends FunctionalList <B>> LB map (BiFunction <Integer, A, B> f, Supplier <LB> constructor) {
+    public <B> FunctionalList <B> mapI (BiFunction <Integer, A, B> f) {
+        return this.mapI (f, FunctionalList :: new);
+    }
+    
+    public <B, LB extends FunctionalList <B>> LB mapI (BiFunction <Integer, A, B> f, Supplier <LB> constructor) {
         return this.genericMap ((i, x, list) -> list.add (f.apply (i, x)), constructor);
     }
     
@@ -578,72 +578,72 @@ public class FunctionalList <A> implements Foldable <A>, Functor <A>, List <A>, 
         return this.map (f, ComparableList :: new);
     }
     
-    public <B extends Comparable <B>> ComparableList <B> mapToComparable (BiFunction <Integer, A, B> f) {
-        return this.map (f, ComparableList :: new);
+    public <B extends Comparable <B>> ComparableList <B> mapToComparableI (BiFunction <Integer, A, B> f) {
+        return this.mapI (f, ComparableList :: new);
     }
     
     public CharList mapToChar (Function <A, Character> f) {
         return this.map (f, CharList :: new);
     }
     
-    public CharList mapToChar (BiFunction <Integer, A, Character> f) {
-        return this.map (f, CharList :: new);
+    public CharList mapToCharI (BiFunction <Integer, A, Character> f) {
+        return this.mapI (f, CharList :: new);
     }
     
     public DoubleList mapToDouble (Function <A, Double> f) {
         return this.map (f, DoubleList :: new);
     }
     
-    public DoubleList mapToDouble (BiFunction <Integer, A, Double> f) {
-        return this.map (f, DoubleList :: new);
+    public DoubleList mapToDoubleI (BiFunction <Integer, A, Double> f) {
+        return this.mapI (f, DoubleList :: new);
     }
     
     public <L, R> EitherList <L, R> mapToEither (Function <A, Either <L, R>> f) {
         return this.map (f, EitherList :: new);
     }
     
-    public <L, R> EitherList <L, R> mapToEither (BiFunction <Integer, A, Either <L, R>> f) {
-        return this.map (f, EitherList :: new);
+    public <L, R> EitherList <L, R> mapToEitherI (BiFunction <Integer, A, Either <L, R>> f) {
+        return this.mapI (f, EitherList :: new);
     }
     
     public FloatList mapToFloat (Function <A, Float> f) {
         return this.map (f, FloatList :: new);
     }
     
-    public FloatList mapToFloat (BiFunction <Integer, A, Float> f) {
-        return this.map (f, FloatList :: new);
+    public FloatList mapToFloatI (BiFunction <Integer, A, Float> f) {
+        return this.mapI (f, FloatList :: new);
     }
     
     public IntegerList mapToInteger (Function <A, Integer> f) {
         return this.map (f, IntegerList :: new);
     }
     
-    public IntegerList mapToInteger (BiFunction <Integer, A, Integer> f) {
-        return this.map (f, IntegerList :: new);
+    public IntegerList mapToIntegerI (BiFunction <Integer, A, Integer> f) {
+        return this.mapI (f, IntegerList :: new);
     }
     
     public LongList mapToLong (Function <A, Long> f) {
         return this.map (f, LongList :: new);
     }
     
-    public LongList mapToLong (BiFunction <Integer, A, Long> f) {
-        return this.map (f, LongList :: new);
+    public LongList mapToLongI (BiFunction <Integer, A, Long> f) {
+        return this.mapI (f, LongList :: new);
     }
     
     public <B> OperatorList <B> mapToOperator (Function <A, UnaryOperator <B>> f) {
         return this.map (f, OperatorList :: new);
     }
     
-    public <B> OperatorList <B> mapToOperator (BiFunction <Integer, A, UnaryOperator <B>> f) {
-        return this.map (f, OperatorList :: new);
+    public <B> OperatorList <B> mapToOperatorI (BiFunction <Integer, A, UnaryOperator <B>> f) {
+        return this.mapI (f, OperatorList :: new);
     }
     
     public <B1, B2> PairList <B1, B2> mapToPair (Function <A, Pair <B1, B2>> f) {
         return this.map (f, PairList :: new);
     }
     
-    public <B1, B2> PairList <B1, B2> mapToPair (BiFunction <Integer, A, Pair <B1, B2>> f) {
-        return this.map (f, PairList :: new);
+    public <B1, B2> PairList <B1, B2> mapToPairI (BiFunction <Integer, A, Pair <B1, B2>> f) {
+        return this.mapI (f, PairList :: new);
     }
     
     public StringList mapToString () {
@@ -654,8 +654,8 @@ public class FunctionalList <A> implements Foldable <A>, Functor <A>, List <A>, 
         return this.map (f, StringList :: new);
     }
     
-    public StringList mapToString (BiFunction <Integer, A, String> f) {
-        return this.map (f, StringList :: new);
+    public StringList mapToStringI (BiFunction <Integer, A, String> f) {
+        return this.mapI (f, StringList :: new);
     }
     
     /**

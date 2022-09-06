@@ -1,9 +1,5 @@
 package com.github.josefplch.utils.data.list;
 
-import com.github.josefplch.utils.data.list.ListUtils;
-import com.github.josefplch.utils.data.list.StringList;
-import com.github.josefplch.utils.data.list.CharList;
-import com.github.josefplch.utils.data.list.FunctionalList;
 import com.github.josefplch.utils.data.list.number.IntegerList;
 import com.github.josefplch.utils.data.nlp.NlpComparators;
 import com.github.josefplch.utils.data.string.AlignmentUtils;
@@ -12,7 +8,7 @@ import java.util.Optional;
 /**
  * @author  Josef Plch
  * @since   2019-04-24
- * @version 2022-01-20
+ * @version 2022-09-06
  */
 public class FunctionalListTest {
     private static void testCartesianProduct () {
@@ -29,7 +25,7 @@ public class FunctionalListTest {
     
     private static void testMap () {
         StringList list = StringList.words ("a bb ccc");
-        System.out.println (list.mapToString ((i, s) -> "#" + i + ": " + s).join (", "));
+        System.out.println (list.mapToStringI ((i, s) -> "#" + i + ": " + s).join (", "));
         System.out.println (list.map (String :: length));
         System.out.println (list.mapOptional (s -> s.length () == 1 ? Optional.empty () : Optional.of (s + s)));
         System.out.println (list.flatMap (CharList :: fromString));

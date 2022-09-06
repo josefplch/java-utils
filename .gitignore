@@ -1,7 +1,7 @@
 build.xml
 build/
 
-# Compiled class file
+# Compiled class files
 *.class
 
 # Log file
@@ -13,11 +13,10 @@ build/
 # Netbeans
 nbproject/
 
-# Mobile Tools for Java (J2ME)
+# Mobile tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
-*.jar
+# Package files
 *.war
 *.nar
 *.ear
