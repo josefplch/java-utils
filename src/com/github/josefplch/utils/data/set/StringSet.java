@@ -30,7 +30,7 @@ public class StringSet extends ComparableSet <String> implements StringFoldable 
     }
     
     public StringSet filterNonBlank () {
-        return this.filter (s -> ! s.isBlank ());
+        return this.filter (s -> ! s.trim ().isEmpty ());
     }
     
     public StringSet filterNonEmpty () {

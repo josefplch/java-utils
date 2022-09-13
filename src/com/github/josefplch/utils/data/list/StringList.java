@@ -75,7 +75,7 @@ public class StringList extends ComparableList <String> implements StringFoldabl
     }
     
     public StringList filterNonBlank () {
-        return this.filter (s -> ! s.isBlank ());
+        return this.filter (s -> ! s.trim ().isEmpty ());
     }
     
     public StringList filterNonEmpty () {
